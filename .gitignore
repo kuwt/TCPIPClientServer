@@ -1,0 +1,14 @@
+*.suo
+*.db
+*.obj
+*.tlog
+*.idb
+*.pdb
+*.ipdb
+*.user
+*.iobj
+*.ilk
+*.log
+*.iml
+*.xml
+*.dll
