@@ -91,7 +91,8 @@ int main(int argc, char* argv[])
 		}
 
 		cv::imshow("server", img);
-		cvWaitKey(1);
+		printf("wait key press on image\n");
+		cvWaitKey(0);
 
 		//feedback
 		char * sendData = "Server: Image Well Received\n";
