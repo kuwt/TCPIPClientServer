@@ -14,6 +14,9 @@ int main(int argc, char* argv[])
 		return 0;
 	}
 
+	/*************************
+	//construct
+	************************/
 	SOCKET sclient = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 	if (sclient == INVALID_SOCKET)
 	{
@@ -25,15 +28,27 @@ int main(int argc, char* argv[])
 	serAddr.sin_family = AF_INET;
 	serAddr.sin_port = htons(8888);
 	serAddr.sin_addr.S_un.S_addr = inet_addr("127.0.0.1");
+
+	/*************************
+	//Connect
+	************************/
 	if (connect(sclient, (sockaddr *)&serAddr, sizeof(serAddr)) == SOCKET_ERROR)
 	{
 		printf("connect error !");
 		closesocket(sclient);
 		return 0;
 	}
+
+	/*************************
+	//Send
+	************************/
 	char * sendData = "hi server, i am client\n";
 	send(sclient, sendData, strlen(sendData), 0);
 
+
+	/*************************
+	//FeedBack
+	************************/
 	char recData[255];
 	int ret = recv(sclient, recData, 255, 0);
 	if (ret > 0)
