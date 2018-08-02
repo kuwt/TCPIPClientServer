@@ -27,6 +27,12 @@
     <ClInclude Include="CMatSerialization.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CObjLocSerialization.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjLoc.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

@@ -6,6 +6,8 @@
 #include <stdio.h>
 #include <opencv2/opencv.hpp>
 #include "CMatSerialization.h"
+#include "CObjLocSerialization.h"
+#include "ObjLoc.h"
 #include "cereal/cereal.hpp"
 #include "cereal/archives/binary.hpp"
 #include "cereal/types/string.hpp"
@@ -20,6 +22,7 @@ int main()
 	sock.connect("tcp://localhost:6666");
 	//sock.connect("ipc:///tmp/test");
 
+	//  serialize to data str
 	std::string data;
 	{
 		std::string imagePath;
@@ -36,18 +39,54 @@ int main()
 		data = std::move(oss.str());
 	}
 
+	// send
 	{
 		zmq::message_t message(data.size());
 		memcpy(message.data(), data.c_str(), data.size());
 		sock.send(message);
 	}
 
+	// receive reply
 	{
-		zmq::message_t reply;
-		sock.recv(&reply, 0);
-		printf("Received %d\n", 0);
-	}
-	sock.close();
+		// receive message
+		std::string msgStr;
+		{
+			zmq::message_t message;
+			sock.recv(&message, 0);
+			msgStr = std::string((char*)message.data(), message.size());
+		}
 
+		// unserialize to objlocs
+		std::vector<ObjLoc> vObjLocs;
+		{
+			std::stringstream iss;
+			iss.str(msgStr);
+			cereal::BinaryInputArchive iar(iss);
+			int size = 0;
+			iar(size);
+			for (int i = 0; i < size; ++i)
+			{
+				ObjLoc stLoc;
+				iar(stLoc);
+				vObjLocs.push_back(stLoc);
+			}
+		}
+
+		// print objlocs
+		std::cout << "print objlocs \n"; 
+		for (int i = 0; i < vObjLocs.size(); ++i)
+		{
+			std::cout 
+				<< vObjLocs.at(i).objClass << " "
+				<< vObjLocs.at(i).score << " "
+				<< vObjLocs.at(i).tlx << " "
+				<< vObjLocs.at(i).tly << " "
+				<< vObjLocs.at(i).brx << " "
+				<< vObjLocs.at(i).bry << "\n";
+		}
+	}
+	
+	sock.close();
+	system("pause");
 	return 0;
 }

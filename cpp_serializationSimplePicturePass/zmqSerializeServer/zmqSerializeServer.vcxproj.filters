@@ -24,7 +24,13 @@
     <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CMatSerialization.h">
+    <ClInclude Include="..\zmqSerializeClient\CMatSerialization.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\zmqSerializeClient\CObjLocSerialization.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\zmqSerializeClient\ObjLoc.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
