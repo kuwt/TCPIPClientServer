@@ -29,6 +29,13 @@ int main()
 		memcpy(message.data(), data.c_str(), data.size());
 		sock.send(message);
 	}
+
+	//reply
+	{
+		zmq::message_t reply;
+		sock.recv(&reply, 0);
+		printf("Received reply\n");
+	}
 	sock.close();
 	system("pause");
 	return 0;

@@ -31,6 +31,14 @@ int main()
 			cv::imshow("load", loaded_data);
 			cv::waitKey(0);
 		}
+
+		//send reply
+		{
+			std::string data = "reply";
+			zmq::message_t message(data.size());
+			memcpy(message.data(), data.c_str(), data.size());
+			socket.send(message);
+		}
 	}
 	socket.close();
 	return 0;
