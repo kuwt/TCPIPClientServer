@@ -10,14 +10,16 @@ socket.bind("tcp://*:6666")
 while True:
     #  Wait for next request from client
     message = socket.recv()
-
-    # decode
-    nparr = np.fromstring(message, np.uint8)
-    img_decode = cv2.imdecode(nparr, cv2.IMREAD_GRAYSCALE)
-
+    
+    #decode
+    str = message.decode("utf-8") 
+   
+    #read
+    img = cv2.imread(str,0)
+    
     #show
-    cv2.imshow("img_decode",img_decode)
+    cv2.imshow("img",img)
     cv2.waitKey()
-
+   
     #  Send reply back to client
     socket.send_string("Reply")
