@@ -13,17 +13,17 @@ int main()
 	while (true)
 	{
 		//  receive message
-		std::string msgStr;
+		std::vector<uchar> imageData;
 		{
 			zmq::message_t message;
 			socket.recv(&message);
-			msgStr = std::string((char*)message.data(), message.size());
+			imageData = std::vector<uchar>(message.size());
+			memcpy(imageData.data(), message.data(), message.size());
 		}
 		//  unserialize to cv::mat
 		cv::Mat loaded_data;
 		{
-			std::vector<uchar> data(msgStr.begin(), msgStr.end());
-			loaded_data = cv::imdecode(data, CV_LOAD_IMAGE_GRAYSCALE);
+			loaded_data = cv::imdecode(imageData, CV_LOAD_IMAGE_GRAYSCALE);
 		}
 		//  show cv::mat
 		{
