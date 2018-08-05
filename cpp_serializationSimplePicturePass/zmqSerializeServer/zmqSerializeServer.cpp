@@ -25,63 +25,60 @@ int main()
 
 	while (true)
 	{
-		//  receive message
-		std::string msgStr;
+		zmq::message_t message;
+		if (socket.recv(&message))
 		{
-			zmq::message_t message;
-			socket.recv(&message);
-			msgStr = std::string((char*)message.data(), message.size());
-		}
+			//  receive message
+			std::string  msgStr = std::string((char*)message.data(), message.size());
 
-		//  unserialize to cv::mat
-		cv::Mat loaded_data;
-		{
-			std::stringstream iss;
-			iss.str(msgStr);
-			cereal::BinaryInputArchive iar(iss);
-			iar(loaded_data);
-		}
-
-		//  show cv::mat
-		{
-			std::cout << "waiting for your key press on the image." << "\n";
-			cv::imshow("load", loaded_data);
-			cv::waitKey(0);
-		}
-		
-		// reply objLocs;
-		{
-			// prepare objLocs;
-			std::vector<ObjLoc> vObjLocs;
+			//  unserialize to cv::mat
+			cv::Mat loaded_data;
 			{
-				ObjLoc Loc;
-				Loc.objClass = 0; Loc.score = 0.6; Loc.tlx = 0; Loc.tly = 2; Loc.brx = 123; Loc.bry = 102;
-				vObjLocs.push_back(Loc);
+				std::stringstream iss;
+				iss.str(msgStr);
+				cereal::BinaryInputArchive iar(iss);
+				iar(loaded_data);
 			}
+			//  show cv::mat
 			{
-				ObjLoc Loc;
-				Loc.objClass = 0; Loc.score = 0.6; Loc.tlx = 120; Loc.tly = 232; Loc.brx = 1233; Loc.bry = 1012;
-				vObjLocs.push_back(Loc);
+				std::cout << "waiting for your key press on the image." << "\n";
+				cv::imshow("load", loaded_data);
+				cv::waitKey(0);
 			}
-
-			//  serialize to string
-			std::string data;
+			// reply objLocs;
 			{
-				std::stringstream oss;
-				cereal::BinaryOutputArchive oar(oss);
-				int size = vObjLocs.size();
-				oar(size);
-				for (int j = 0; j < vObjLocs.size(); j++) 
+				// prepare objLocs;
+				std::vector<ObjLoc> vObjLocs;
 				{
-					oar(vObjLocs.at(j));
+					ObjLoc Loc;
+					Loc.objClass = 0; Loc.score = 0.6; Loc.tlx = 0; Loc.tly = 2; Loc.brx = 123; Loc.bry = 102;
+					vObjLocs.push_back(Loc);
 				}
-				data = std::move(oss.str());
+				{
+					ObjLoc Loc;
+					Loc.objClass = 0; Loc.score = 0.6; Loc.tlx = 120; Loc.tly = 232; Loc.brx = 1233; Loc.bry = 1012;
+					vObjLocs.push_back(Loc);
+				}
+
+				//  serialize to string
+				std::string data;
+				{
+					std::stringstream oss;
+					cereal::BinaryOutputArchive oar(oss);
+					int size = vObjLocs.size();
+					oar(size);
+					for (int j = 0; j < vObjLocs.size(); j++)
+					{
+						oar(vObjLocs.at(j));
+					}
+					data = std::move(oss.str());
+				}
+
+				//  send message
+				zmq::message_t message(data.size());
+				memcpy(message.data(), data.c_str(), data.size());
+				socket.send(message);
 			}
-		
-			//  send message
-			zmq::message_t message(data.size());
-			memcpy(message.data(), data.c_str(), data.size());
-			socket.send(message);
 		}
 	}
 	socket.close();
