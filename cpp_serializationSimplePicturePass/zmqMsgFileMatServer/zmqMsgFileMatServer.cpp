@@ -13,24 +13,19 @@ int main()
 	while (true)
 	{
 		//  receive message
-		std::string msgStr;
+		zmq::message_t message;
+		if (socket.recv(&message))
 		{
-			zmq::message_t message;
-			socket.recv(&message);
-			msgStr = std::string((char*)message.data(), message.size());
-		}
-		//   restore cv::mat from harddisk
-		cv::Mat loaded_data;
-		{
-			loaded_data = cv::imread(msgStr, CV_LOAD_IMAGE_GRAYSCALE);
-		}
-		//  show cv::mat
-		{
-			std::cout << "waiting for your key press on the image." << "\n";
-			cv::imshow("load", loaded_data);
-			cv::waitKey(0);
-		}
-
+			std::string  msgStr = std::string((char*)message.data(), message.size());
+			//   restore cv::mat from harddisk
+			cv::Mat loaded_data = cv::imread(msgStr, CV_LOAD_IMAGE_GRAYSCALE);
+			//  show cv::mat
+			{
+				std::cout << "waiting for your key press on the image." << "\n";
+				cv::imshow("load", loaded_data);
+				cv::waitKey(0);
+			}
+		}		
 		//send reply
 		{
 			std::string data = "reply";
