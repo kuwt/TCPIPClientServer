@@ -21,6 +21,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "zmqMsgFileMatServer", "zmqM
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "zmqMsgFileMatClient", "zmqMsgFileMatClient\zmqMsgFileMatClient.vcxproj", "{D3C4D804-DB99-4246-9822-F248FF4A1CDC}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "protobufZmqSimpleClient", "protobufZmqSimpleClient\protobufZmqSimpleClient.vcxproj", "{9237DC1C-D6B4-42F2-B63D-EDFED58BA507}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "protobufZmqSimpleServer", "protobufZmqSimpleServer\protobufZmqSimpleServer.vcxproj", "{CA6FD571-F5D3-4241-80F5-844977765488}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -101,6 +105,22 @@ Global
 		{D3C4D804-DB99-4246-9822-F248FF4A1CDC}.Release|x64.Build.0 = Release|x64
 		{D3C4D804-DB99-4246-9822-F248FF4A1CDC}.Release|x86.ActiveCfg = Release|Win32
 		{D3C4D804-DB99-4246-9822-F248FF4A1CDC}.Release|x86.Build.0 = Release|Win32
+		{9237DC1C-D6B4-42F2-B63D-EDFED58BA507}.Debug|x64.ActiveCfg = Debug|x64
+		{9237DC1C-D6B4-42F2-B63D-EDFED58BA507}.Debug|x64.Build.0 = Debug|x64
+		{9237DC1C-D6B4-42F2-B63D-EDFED58BA507}.Debug|x86.ActiveCfg = Debug|Win32
+		{9237DC1C-D6B4-42F2-B63D-EDFED58BA507}.Debug|x86.Build.0 = Debug|Win32
+		{9237DC1C-D6B4-42F2-B63D-EDFED58BA507}.Release|x64.ActiveCfg = Release|x64
+		{9237DC1C-D6B4-42F2-B63D-EDFED58BA507}.Release|x64.Build.0 = Release|x64
+		{9237DC1C-D6B4-42F2-B63D-EDFED58BA507}.Release|x86.ActiveCfg = Release|Win32
+		{9237DC1C-D6B4-42F2-B63D-EDFED58BA507}.Release|x86.Build.0 = Release|Win32
+		{CA6FD571-F5D3-4241-80F5-844977765488}.Debug|x64.ActiveCfg = Debug|x64
+		{CA6FD571-F5D3-4241-80F5-844977765488}.Debug|x64.Build.0 = Debug|x64
+		{CA6FD571-F5D3-4241-80F5-844977765488}.Debug|x86.ActiveCfg = Debug|Win32
+		{CA6FD571-F5D3-4241-80F5-844977765488}.Debug|x86.Build.0 = Debug|Win32
+		{CA6FD571-F5D3-4241-80F5-844977765488}.Release|x64.ActiveCfg = Release|x64
+		{CA6FD571-F5D3-4241-80F5-844977765488}.Release|x64.Build.0 = Release|x64
+		{CA6FD571-F5D3-4241-80F5-844977765488}.Release|x86.ActiveCfg = Release|Win32
+		{CA6FD571-F5D3-4241-80F5-844977765488}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
