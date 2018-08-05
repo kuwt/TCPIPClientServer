@@ -5,7 +5,8 @@
 #include <zmq.hpp>
 #include <string>
 #include <iostream>
-#include "foo.pb.h"
+#include "objectInfos.pb.h"
+#include <opencv2/opencv.hpp>
 int main()
 {
 	//  Prepare our context and socket
@@ -17,17 +18,54 @@ int main()
 
 	while (true)
 	{
-		zmq::message_t request;
-		socket.recv(&request);
-		std::string  msgStr = std::string((char*)request.data(), request.size());
+		//  receive message
+		zmq::message_t message;
+		if (socket.recv(&message))
+		{
+			// decoode
+			std::vector<uchar> imageData = std::vector<uchar>(message.size());
+			memcpy(imageData.data(), message.data(), message.size());
+			cv::Mat loaded_data = cv::imdecode(imageData, CV_LOAD_IMAGE_GRAYSCALE);
+			//  show cv::mat
+			{
+				std::cout << "waiting for your key press on the image." << "\n";
+				cv::imshow("load", loaded_data);
+				cv::waitKey(0);
+			}
+		}
+	
+		//  send feedback
+		{
+			// random feedback
+			proto::objectInfos stObjectInfos;
+			{
+				proto::objectInfos::objectInfo *p = stObjectInfos.add_infos();
+				p->set_objclass(0);
+				p->set_score(0);
+				p->set_tlx(0);
+				p->set_tly(0);
+				p->set_brx(11);
+				p->set_bry(32);
+			}
+			{
+				proto::objectInfos::objectInfo *p = stObjectInfos.add_infos();
+				p->set_objclass(1);
+				p->set_score(2);
+				p->set_tlx(3);
+				p->set_tly(4);
+				p->set_brx(67);
+				p->set_bry(88);
+			}
 
-		prototest::Foo foo;
-		foo.ParseFromString(msgStr);
-		std::cout << foo.id() << " " << foo.bar() << "\n";
+			// serialize
+			std::string buf;
+			stObjectInfos.SerializeToString(&buf);
 
-		zmq::message_t reply(5);
-		memcpy((void *)reply.data(), "reply", 5);
-		socket.send(reply);
+			// send
+			zmq::message_t message(buf.size());
+			memcpy(message.data(), buf.c_str(), buf.size());
+			socket.send(message);
+		}
 	}
 	socket.close();
 	return 0;

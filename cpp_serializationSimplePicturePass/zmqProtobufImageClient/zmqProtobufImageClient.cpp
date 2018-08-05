@@ -5,8 +5,8 @@
 #include <zmq.hpp>
 #include <string.h>
 #include <stdio.h>
-
-#include "../protobufZmqSimpleServer/foo.pb.h"
+#include <opencv2/opencv.hpp>
+#include "../zmqProtobufImageServer/objectInfos.pb.h"
 
 int main(void)
 {
@@ -19,22 +19,48 @@ int main(void)
 
 	// initialise a foo and set some properties
 	GOOGLE_PROTOBUF_VERIFY_VERSION;
-	prototest::Foo foo;
-	foo.set_id(4);
-	foo.set_bar("narf");
-	std::string buf;
-	foo.SerializeToString(&buf);
 
+	std::vector<uchar> data_encode;
+	{
+		std::string imagePath;
+		std::cout << "1|2|3|4|5" << "\n";
+		int imageId;
+		std::cin >> imageId;
+		imagePath = std::string("wall") + std::to_string(imageId) + ".jpg";
+		cv::Mat Imgdata = cv::imread(imagePath, CV_LOAD_IMAGE_GRAYSCALE);
+
+		cv::imencode(".bmp", Imgdata, data_encode);
+	}
 	// send
 	{
-		zmq::message_t message(buf.size());
-		memcpy(message.data(), buf.data(), buf.size());
+		zmq::message_t message(data_encode.size());
+		memcpy(message.data(), data_encode.data(), data_encode.size());
 		sock.send(message);
 	}
 
-	zmq::message_t reply;
-	sock.recv(&reply, 0);
+	//reply
+	{
+		//receive reply
+		zmq::message_t reply;
+		sock.recv(&reply, 0);
+		std::string  msgStr = std::string((char*)reply.data(), reply.size());
 
+		//unserialize
+		proto::objectInfos stObjectInfos;
+		stObjectInfos.ParseFromString(msgStr);
+		
+		for (int i = 0; i < stObjectInfos.infos_size(); ++i)
+		{
+			std::cout << stObjectInfos.infos(i).objclass() << " "
+				<< stObjectInfos.infos(i).score() << " "
+				<< stObjectInfos.infos(i).tlx() << " "
+				<< stObjectInfos.infos(i).tly() << " "
+				<< stObjectInfos.infos(i).brx() << " "
+				<< stObjectInfos.infos(i).bry() << " "
+				<< "\n";
+		}
+	}
 	sock.close();
+	system("pause");
 	return 0;
 }
