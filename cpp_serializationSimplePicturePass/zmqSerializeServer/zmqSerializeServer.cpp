@@ -1,4 +1,5 @@
-// zmqSerializeServer.cpp : Defines the entry point for the console application.
+// zmq + cereal
+// server using zmq for iamge message and obj message passing
 //
 
 #include <zmq.hpp>

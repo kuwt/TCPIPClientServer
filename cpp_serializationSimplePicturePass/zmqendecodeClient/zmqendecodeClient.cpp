@@ -1,3 +1,6 @@
+// zmq + opencv
+// client using zmq for image message with encode decode mechanism
+//
 
 #include <zmq.hpp>
 #include <string.h>

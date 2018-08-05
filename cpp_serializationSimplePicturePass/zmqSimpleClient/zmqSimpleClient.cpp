@@ -1,4 +1,5 @@
-// zmqSimpleClient.cpp : Defines the entry point for the console application.
+// zmq 
+// client using zmq for simple message passing
 //
 
 #include <zmq.hpp>

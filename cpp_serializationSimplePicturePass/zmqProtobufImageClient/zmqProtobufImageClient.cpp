@@ -34,7 +34,7 @@ int main(void)
 
 	zmq::message_t reply;
 	sock.recv(&reply, 0);
-	
+
 	sock.close();
 	return 0;
 }

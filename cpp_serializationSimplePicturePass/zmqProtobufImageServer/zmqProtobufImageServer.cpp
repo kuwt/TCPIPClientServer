@@ -23,8 +23,8 @@ int main()
 
 		prototest::Foo foo;
 		foo.ParseFromString(msgStr);
-		std::cout<< foo.id() << " " << foo.bar() << "\n";
-	
+		std::cout << foo.id() << " " << foo.bar() << "\n";
+
 		zmq::message_t reply(5);
 		memcpy((void *)reply.data(), "reply", 5);
 		socket.send(reply);

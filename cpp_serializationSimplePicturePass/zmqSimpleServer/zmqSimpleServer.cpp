@@ -1,10 +1,5 @@
-// zmqSimpleServer.cpp : Defines the entry point for the console application.
-//
-
-//
-//  Hello World server in C++
-//  Binds REP socket to tcp://*:5555
-//  Expects "Hello" from client, replies with "World"
+// zmq 
+// server using zmq for simple message passing
 //
 #include <zmq.hpp>
 #include <string>

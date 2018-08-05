@@ -1,6 +1,6 @@
-// SerializeSimplePicturePass.cpp : Defines the entry point for the console application.
+// Cereal + opencv
+// Serialize and unserialize an image using cereal
 //
-
 #include <opencv2/opencv.hpp>
 #include "CMatSerialization.h"
 #include "cereal/cereal.hpp"

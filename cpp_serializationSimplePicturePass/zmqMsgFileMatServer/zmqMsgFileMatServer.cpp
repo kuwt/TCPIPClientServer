@@ -1,3 +1,7 @@
+// zmq + opencv
+// server using zmq for simple message with file system image passing
+//
+
 #include <zmq.hpp>
 #include <string.h>
 #include <stdio.h>
